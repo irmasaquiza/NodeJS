@@ -38,32 +38,31 @@ app.get('/movies/:id', (req, res) => {
 
 // crear una pelicula
 
-app.post('/movies',(req,res)=>{
-const result = validateMovie(req.body);
+app.post('/movies', (req, res) => {
+  const result = validateMovie(req.body);
 
+  if (!result.success) {
+    return res.status(400).json({ error: result.error.format() });
+  }
 
+  const { title, year, director, duration, poster, genre, rate = 0 } = req.body;
 
-
-    const newMovie = {
+  const newMovie = {
     id: crypto.randomUUID(),
-    title, 
-    year,  // validar que sea un numero y que tenga 4 digitos 
+    title,
+    year,
     director,
     duration,
-    poster, 
-    genre, 
-    rate: rate || 0 
-};
+    poster,
+    genre,
+    rate
+  };
 
-    peliculas.push(newMovie); 
+  peliculas.push(newMovie);
 
-    res.status(201).json(newMovie);
+  res.status(201).json(newMovie);
+});
 
-}
-
-
-
-);
 
 
 app.patch('/movies/:id', (req, res) => {
